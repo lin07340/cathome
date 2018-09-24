@@ -4,13 +4,12 @@ from flask_script import Manager
 from cathome import app, db
 from cathome.models import User, Image, Comment
 import random
-
+import hashlib
 manager = Manager(app)
 
 
 @manager.command
 def init():
-    '''
     m = hashlib.md5()
     db.drop_all()
     db.create_all()
@@ -29,7 +28,6 @@ def init():
                 db.session.add(Comment('this is comment from me!', random.randint(1,300), random.randint(1,100)))
 
     db.session.commit()
-    '''
     for i in range(5000):
         db.session.add(Comment('this is comment from me!', random.randint(1, 1000), random.randint(1, 100)))
     db.session.commit()
