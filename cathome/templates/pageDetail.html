@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}图片详情{% endblock %}
+{% block css %}/static/css/styles/pages/detail.css{% endblock %}
+{% block body %}
+{% if msg|length != 0 %}
+<script>alert("{{ msg }}")</script>
+{% endif %}
+<div class="page-main clearfix">
+    <article>
+        <div class="pic-wrapper">
+            <img src="{{image.url}}">
+        </div>
+        <div class="pic-discuss">
+            <header class="discuss-hd">
+                <a class="avatar">
+                    <img src="{{image.user.head_url}}">
+                </a>
+                <div class="profile-info">
+                    <a title="{{image.user.name}}" href="/profile/{{image.user.id}}">{{image.user.name}}</a>
+                </div>
+            </header>
+            <!--<section class="like-item">
+                <time class="discuss-time" datetime="2016-05-07T02:21:41.000Z" title="2016年5月7日" data-reactid=".0.1.0.0.0.2.0.1.0">2 周</time>
+                <div class="like-names">
+                    <a class="_4zhc5 _lx2l2" title="redmadqueen" href="/redmadqueen/">redmadqueen</a>、
+                    <a class="_4zhc5 _lx2l2" title="chuan.hehe" href="/chuan.hehe/" data-reactid=".0.1.0.0.0.2.0.0.3">chuan.hehe</a>、
+                    <a class="_4zhc5 _lx2l2" title="relationshipinspire" href="/relationshipinspire/" data-reactid=".0.1.0.0.0.2.0.0.5">relationshipinspire</a>、
+                    <a class="_4zhc5 _lx2l2" title="archisdy" href="/archisdy/" data-reactid=".0.1.0.0.0.2.0.0.7">archisdy</a>、
+                    <a class="_4zhc5 _lx2l2" title="scottiecosmos" href="/scottiecosmos/" data-reactid=".0.1.0.0.0.2.0.0.9">scottiecosmos</a>
+                    <span data-reactid=".0.1.0.0.0.2.0.0.a"> 赞了</span>
+                </div>
+            </section>-->
+            <ul class="discuss-list js-discuss-list">
+                {% for comment in comments %}
+                {% if loop.index>20 %}{% break %}{% endif %}
+                <li>
+                    {% if current_user.id == image.user.id or current_user.id == comment.from_user_id %}
+                    <a class=" icon-remove" onclick="return confirm('确定删除该评论吗?')"
+                       href="/remove_comment/{{ comment.id }}/" title="删除评论"></a>
+                    {% endif %}
+                    <a class="_4zhc5 _iqaka" title="{{comment.user.name}}" href="/profile/{{comment.user.id}}"
+                       data-reactid=".0.1.0.0.0.2.1.2:$comment-17856951190001917.1">{{comment.user.name}}:</a>
+                    <span>
+                            <span>{{comment.content}}</span>
+                        </span>
+                </li>
+                {% endfor %}
+            </ul>
+            <section class="discuss-edit">
+                <a class="icon-heart-empty"></a>
+                <input placeholder="添加评论..." id="jsCmt" type="text">
+                <button class="more-info" id="jsSubmit">更多选项</button>
+            </section>
+        </div>
+    </article>
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    window.imageId = {{image.id}};
+    window.comment_count = {{ image.comments | length}};
+    window.user = {{image.user.id}};
+    window.current = {{ current_user.id}};
+
+</script>
+<script type="text/javascript" src="/static/css/js/jquery.js"></script>
+<script type="text/javascript" src="/static/css/js/detail.js"></script>
+{% endblock %}
