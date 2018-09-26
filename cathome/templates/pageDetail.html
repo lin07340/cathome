@@ -31,7 +31,7 @@
                 </div>
             </section>-->
             <ul class="discuss-list js-discuss-list">
-                {% for comment in comments %}
+                {% for comment in comments if comment.status == 0 %}
                 {% if loop.index>20 %}{% break %}{% endif %}
                 <li>
                     {% if current_user.id == image.user.id or current_user.id == comment.from_user_id %}

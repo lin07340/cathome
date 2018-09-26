@@ -48,7 +48,7 @@ class Image(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     create_date = db.Column(db.DateTime)
     comments = db.relationship('Comment')
-
+    #show_comment_count = db.Column(db.Integer(256))
     def __init__(self, url, user_id):
         self.url = url
         self.user_id = user_id

@@ -32,11 +32,12 @@
             <ul class="discuss-list">
                 <li class="more-discuss">
                     <a href="/image/{{image.id}}/">
-                        <span>全部 </span><span class="length-{{loop.index}}">{{image.comments|length}}</span>
+                        <span>全部 </span><span class="length-{{loop.index}}">{{ image.comments|selectattr
+                        ('status', 'equalto', 0)|list|length }} </span>
                         <span> 条评论</span></a>
                 </li>
                 <tag class="content_detail js-discuss-list-{{loop.index}}">
-                    {% for comment in image.comments|reverse %}
+                    {% for comment in image.comments|reverse if comment.status == 0 %}
                     {% if loop.index > 3 %} {% break %} {% endif %}
                     <li>
                         <a class="_4zhc5 _iqaka" title="{{comment.user.name}}" href="/profile/{{comment.user.id}}"

@@ -59,10 +59,10 @@ $(function () {
                     oCmtIpt.val('');
 
                     // 修改评论数
-                    var counts = $(".length-" + id).text()
+                    var counts = $(".length-" + id).text();
                     $(".length-" + id).text(parseInt(counts, 10) + 1);
                     if (counts >= 3) {
-                        $(".content_detail li:last-child").remove()
+                        $(".content_detail li:last-child").remove();
                         console.log(counts)
                     }
                     // 渲染新的评论

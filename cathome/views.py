@@ -25,13 +25,14 @@ def index_more(page, per_page):
     images = []
     for image in paginate.items:
         comments = []
-        for i in range(len(image.comments), max(0, len(image.comments) - 3), -1):
-            comment = image.comments[i - 1]
+        show_comments = Comment.query.filter_by(image=image).filter_by(status=0).all()
+        for i in range(len(show_comments), max(0, len(show_comments) - 3), -1):
+            comment = show_comments[i - 1]
             comments.append(
                 {'content': comment.content, 'username': comment.user.name, 'from_user_id': comment.from_user_id})
         imgvo = {'id': image.id,
                  'url': image.url,
-                 'comment_count': len(image.comments),
+                 'comment_count': len(show_comments),
                  'username': image.user.name,
                  'user_id': image.user_id,
                  'head_url': image.user.head_url,
@@ -147,7 +148,8 @@ def user_images(user_id, page, per_page):
     map = {'has_next': pagination.has_next}
     images = []
     for image in pagination.items:
-        imgvo = {'id': image.id, 'url': image.url, 'comment_count': len(image.comments)}
+        comments = Comment.query.filter_by(image=image).filter_by(status=0).all()
+        imgvo = {'id': image.id, 'url': image.url, 'comment_count': len(comments)}
         images.append(imgvo)
     map['images'] = images
     return json.dumps(map)
@@ -172,6 +174,16 @@ def add_comment():
         return json.dumps(map)
     else:
         return json.dumps({'code': -2})
+
+@app.route('/remove_comment/<int:comment_id>/')
+def remove_comment(comment_id):
+    comment = Comment.query.filter_by(id=comment_id).first()
+    if current_user.id == comment.image.user_id or current_user.id == comment.from_user_id:
+        comment.status = 1
+        print('comment remove')
+        db.session.commit()
+        return redirect_with_message('/image/' + str(comment.image.id) + '/', u'删除成功！', 'remove_comment')
+    return redirect_with_message('/image/' + str(comment.image.id) + '/', u'您没有删除权限！', 'remove_comment')
 
 
 def save_to_local(file, file_name):
@@ -213,17 +225,6 @@ def redirect_with_message(target, message, category):
     if message != None:
         flash(message, category=category)
     return redirect(target)
-
-
-@app.route('/remove_comment/<int:comment_id>/')
-def remove_comment(comment_id):
-    comment = Comment.query.filter_by(id=comment_id).first()
-    if current_user.id == comment.image.user_id or current_user.id == comment.from_user_id:
-        db.session.delete(comment)
-        print('comment remove')
-        db.session.commit()
-        return redirect_with_message('/image/' + str(comment.image.id) + '/', u'删除成功！', 'remove_comment')
-    return redirect_with_message('/image/' + str(comment.image.id) + '/', u'您没有删除权限！', 'remove_comment')
 
 
 @login_required
