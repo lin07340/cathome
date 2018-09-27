@@ -24,7 +24,9 @@
                         </form>
                     </span>
                     {% endif %}
+                    {% if current_user.id == user.id %}
                     <a type="button" class="logout" onclick="return confirm('确认退出当前账号吗?')" href="/logout/">退出当前账号</a>
+                    {% endif %}
                 </div>
                 <!--
                 <div class="profile-info-sub">
