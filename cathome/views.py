@@ -131,7 +131,7 @@ def image(image_id):
 @login_required
 def profile(user_id):
     mes = ''
-    for m in get_flashed_messages(with_categories=False, category_filter=['upload']):
+    for m in get_flashed_messages(with_categories=False, category_filter=['upload','remove']):
         mes += m
     user = User.query.filter_by(id=user_id).first()
     if user == None:
@@ -179,11 +179,15 @@ def add_comment():
 def remove_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first()
     if current_user.id == comment.image.user_id or current_user.id == comment.from_user_id:
-        comment.status = 1
-        print('comment remove')
-        db.session.commit()
+        remove_comment_method(comment)
         return redirect_with_message('/image/' + str(comment.image.id) + '/', u'删除成功！', 'remove_comment')
     return redirect_with_message('/image/' + str(comment.image.id) + '/', u'您没有删除权限！', 'remove_comment')
+
+
+def remove_comment_method(comment):
+    comment.status = 1
+    print('comment remove')
+    db.session.commit()
 
 
 def save_to_local(file, file_name):
@@ -214,6 +218,19 @@ def upload():
             return redirect_with_message('/profile/' + str(current_user.id) + '/', u'文件格式不对', 'upload')
     else:
         return redirect_with_message('/profile/' + str(current_user.id) + '/', u'文件格式不对', 'upload')
+
+
+@app.route('/remove_image/<int:image_id>')
+def remove_image(image_id):
+    image = Image.query.filter_by(id=image_id).first()
+    if current_user.id == image.user.id:
+        comments = Comment.query.filter_by(image=image).all()
+        for comment in comments:
+            comment.status = 1
+        db.session.delete(image)
+        db.session.commit()
+        return redirect_with_message('/profile/' + str(current_user.id) + '/', u'删除成功', 'remove')
+    return redirect_with_message('/profile/' + str(current_user.id) + '/', u'没有删除权限', 'remove')
 
 
 @app.route('/image/<image_name>/')
