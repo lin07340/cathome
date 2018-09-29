@@ -50,6 +50,14 @@
                 <a class="icon-heart-empty"></a>
                 <input placeholder="添加评论..." id="jsCmt" type="text">
                 <button class="more-info" id="jsSubmit">更多选项</button>
+                <div class="dropdown">
+                  <button class="dropbtn">Dropdown</button>
+                  <div class="dropdown-content">
+                    {% if current_user.id == image.user.id %}
+                      <a onclick="return confirm('确定删除图片吗?')" href="/remove_image/{{ image.id }}">删除图片</a>
+                    {% endif %}
+                  </div>
+                </div>
             </section>
         </div>
     </article>

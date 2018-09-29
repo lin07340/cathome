@@ -129,5 +129,50 @@
     font-size: 15px;
     line-height: 18px;
     border: none;
-    width: 200px;
+    width: 170px;
+    display: inline-block;
 }
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    display: inline-block;
+    background: url(../../images/img/icons2.png) no-repeat -228px 0px;
+    background-size: 299px 291px;
+    height: 44px;
+    width: 44px;
+    text-indent: -9999em;
+}
+.more-info {
+    display: inline-block;
+    border: none;
+    background: url(../../images/img/enter.png) no-repeat;
+    background-size: cover;
+    text-indent: -9999em;
+}
+.dropdown {
+    display: inline-block;
+
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
